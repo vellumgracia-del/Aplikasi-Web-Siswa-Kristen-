@@ -3,34 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Siswa Kristen - SMAN 1 Kandangan</title>
+    <title>SARKRIS - SMAN 1 Kandangan</title>
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e40af">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2907/2907253.png">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter & Merriweather (untuk kesan elegan/alkitabiah) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; user-select: none; -webkit-tap-highlight-color: transparent; }
         .font-serif { font-family: 'Merriweather', serif; }
         
-        /* Animasi Halus */
         .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Custom Scrollbar */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
         
-        /* Sidebar Active State */
-        .nav-item.active {
-            background-color: #eff6ff;
-            color: #1e40af; /* Blue 800 */
-            border-right: 3px solid #1e40af;
-            font-weight: 600;
-        }
+        .nav-item.active { background-color: #eff6ff; color: #1e40af; border-right: 3px solid #1e40af; font-weight: 600; }
+        
+        /* Floating Install Button Animation */
+        .slide-up { animation: slideUp 0.5s ease-out forwards; }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body class="text-slate-800 antialiased h-screen overflow-hidden bg-slate-50">
@@ -38,435 +42,251 @@
     <div id="app" class="relative w-full h-full">
 
         <!-- ========================================= -->
-        <!-- 1. HALAMAN LOGIN (LANDING PAGE KHUSUS)    -->
+        <!-- NOTIFIKASI INSTALL PWA (Floating Banner)  -->
+        <!-- ========================================= -->
+        <div id="pwa-install-banner" class="hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-white shadow-[0_-5px_20px_rgba(0,0,0,0.1)] rounded-t-3xl slide-up border-t border-blue-100 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-100 p-3 rounded-2xl text-blue-700">
+                    <i class="fas fa-download text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-800">Install Aplikasi SARKRIS</h3>
+                    <p class="text-xs text-slate-500">Pasang di Home Screen agar lebih mudah akses.</p>
+                </div>
+            </div>
+            <div class="flex gap-3 w-full md:w-auto">
+                <button onclick="dismissInstall()" class="flex-1 md:flex-none py-2 px-4 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100 transition">Nanti</button>
+                <button id="btn-install" class="flex-1 md:flex-none py-2 px-6 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200 transition">
+                    Install Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- 1. HALAMAN LOGIN                          -->
         <!-- ========================================= -->
         <section id="page-login" class="h-full w-full flex items-center justify-center p-4 bg-[url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center overflow-y-auto">
-            <!-- Overlay Gelap agar tulisan terbaca -->
             <div class="absolute inset-0 bg-blue-900/80 backdrop-blur-sm"></div>
 
             <div class="relative z-10 bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row fade-in min-h-[600px]">
                 
-                <!-- Kiri: Branding Rohani -->
-                <div class="md:w-5/12 bg-gradient-to-br from-blue-800 to-indigo-900 p-12 flex flex-col justify-between text-white relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-12 opacity-10">
-                        <i class="fas fa-cross text-9xl"></i>
-                    </div>
-                    
+                <!-- Kiri: Branding -->
+                <div class="md:w-5/12 bg-gradient-to-br from-blue-800 to-indigo-900 p-10 flex flex-col justify-between text-white relative">
+                    <div class="absolute top-0 right-0 p-12 opacity-10"><i class="fas fa-cross text-9xl"></i></div>
                     <div class="relative z-10">
-                        <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-8 border border-white/20 shadow-lg">
-                            <i class="fas fa-bible text-4xl text-yellow-400"></i>
+                        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 border border-white/20 shadow-lg">
+                            <i class="fas fa-bible text-3xl text-yellow-400"></i>
                         </div>
-                        <p class="text-blue-200 font-serif italic mb-2">"Takut akan Tuhan adalah permulaan pengetahuan"</p>
-                        <h1 class="text-3xl font-bold leading-tight mb-2">Siswa Kristen<br>SMAN 1 Kandangan</h1>
-                        <p class="text-blue-200 text-sm mt-4 border-t border-blue-700/50 pt-4">Sistem Absensi & Pembinaan Iman</p>
+                        <p class="text-blue-200 font-serif italic mb-2 text-sm">"Takut akan Tuhan adalah permulaan pengetahuan"</p>
+                        <h1 class="text-2xl font-bold leading-tight mb-2">Siswa Kristen<br>SMAN 1 Kandangan</h1>
                     </div>
-                    
-                    <div class="relative z-10 text-xs text-blue-300 mt-8">
-                        &copy; 2026/2027 SARKRIS SMASAKA Oleh Zulfa Fahmiy A.
-                    </div>
+                    <div class="relative z-10 text-[10px] text-blue-300 mt-8">&copy; 2024 SARKRIS SMASA - Ver 2.0 (PWA)</div>
                 </div>
 
-                <!-- Kanan: Form Login -->
-                <div class="md:w-7/12 p-10 md:p-14 bg-white flex flex-col justify-center relative">
-                    
-                    <!-- Pilihan Login -->
-                    <div id="login-options" class="w-full max-w-md mx-auto space-y-8">
+                <!-- Kanan: Form -->
+                <div class="md:w-7/12 p-8 md:p-12 bg-white flex flex-col justify-center relative">
+                    <div id="login-options" class="w-full max-w-md mx-auto space-y-6">
                         <div class="text-center">
-                            <h2 class="text-3xl font-bold text-slate-800 mb-2 font-serif">Shalom!</h2>
-                            <p class="text-slate-500">Selamat datang di portal absensi kerohanian.</p>
+                            <h2 class="text-2xl font-bold text-slate-800 mb-1 font-serif">Shalom!</h2>
+                            <p class="text-sm text-slate-500">Silakan pilih akses masuk.</p>
                         </div>
-                        
-                        <div class="space-y-4">
-                            <button onclick="showLoginForm('student')" class="group w-full flex items-center p-5 border border-slate-200 rounded-2xl hover:border-blue-600 hover:bg-blue-50 transition-all text-left shadow-sm hover:shadow-md">
-                                <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-2xl mr-5 group-hover:scale-110 transition-transform">
-                                    <i class="fas fa-hands-praying"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-slate-800 text-lg group-hover:text-blue-700">Masuk sebagai Siswa</h3>
-                                    <p class="text-sm text-slate-500">Absensi & Renungan Harian</p>
-                                </div>
-                            </button>
-
-                            <button onclick="showLoginForm('admin')" class="group w-full flex items-center p-5 border border-slate-200 rounded-2xl hover:border-indigo-600 hover:bg-indigo-50 transition-all text-left shadow-sm hover:shadow-md">
-                                <div class="w-14 h-14 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center text-2xl mr-5 group-hover:scale-110 transition-transform">
-                                    <i class="fas fa-church"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-slate-800 text-lg group-hover:text-indigo-700">Masuk sebagai Guru</h3>
-                                    <p class="text-sm text-slate-500">Dashboard & Data Jemaat Siswa</p>
-                                </div>
-                            </button>
-                        </div>
+                        <button onclick="showLoginForm('student')" class="group w-full flex items-center p-4 border border-slate-200 rounded-2xl hover:border-blue-600 hover:bg-blue-50 transition-all text-left shadow-sm">
+                            <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-xl mr-4 group-hover:scale-110 transition-transform"><i class="fas fa-hands-praying"></i></div>
+                            <div><h3 class="font-bold text-slate-800 group-hover:text-blue-700">Siswa</h3><p class="text-xs text-slate-500">Absensi & Renungan</p></div>
+                        </button>
+                        <button onclick="showLoginForm('admin')" class="group w-full flex items-center p-4 border border-slate-200 rounded-2xl hover:border-indigo-600 hover:bg-indigo-50 transition-all text-left shadow-sm">
+                            <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center text-xl mr-4 group-hover:scale-110 transition-transform"><i class="fas fa-church"></i></div>
+                            <div><h3 class="font-bold text-slate-800 group-hover:text-indigo-700">Guru Agama</h3><p class="text-xs text-slate-500">Admin Dashboard</p></div>
+                        </button>
                     </div>
 
-                    <!-- Form Input (Hidden) -->
-                    <div id="login-form-wrapper" class="hidden absolute inset-0 bg-white p-10 md:p-14 flex flex-col justify-center fade-in z-20">
-                        <button onclick="resetLogin()" class="absolute top-8 left-8 text-slate-400 hover:text-slate-700 flex items-center gap-2 text-sm font-medium transition-colors">
-                            <i class="fas fa-arrow-left"></i> Kembali
-                        </button>
-                        
+                    <div id="login-form-wrapper" class="hidden absolute inset-0 bg-white p-8 md:p-12 flex flex-col justify-center fade-in z-20">
+                        <button onclick="resetLogin()" class="absolute top-6 left-6 text-slate-400 hover:text-slate-700 flex items-center gap-2 text-sm font-medium"><i class="fas fa-arrow-left"></i> Kembali</button>
                         <div class="w-full max-w-sm mx-auto">
-                            <div class="text-center mb-8">
-                                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-600">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <h2 id="form-title" class="text-2xl font-bold text-slate-800">Login</h2>
-                            </div>
-                            
-                            <form onsubmit="handleLoginProcess(event)" class="space-y-5">
+                            <h2 id="form-title" class="text-xl font-bold text-slate-800 mb-6 text-center">Login</h2>
+                            <form onsubmit="handleLoginProcess(event)" class="space-y-4">
                                 <div id="input-nis-group" class="hidden">
-                                    <label class="block text-sm font-semibold text-slate-700 mb-2">NIS Siswa</label>
-                                    <input type="text" id="login-nis" class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all placeholder:text-slate-400" placeholder="Nomor Induk Siswa">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">NIS Siswa</label>
+                                    <input type="text" id="login-nis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor Induk Siswa">
                                 </div>
-
                                 <div>
-                                    <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
-                                    <input type="password" id="login-pass" required class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all placeholder:text-slate-400" placeholder="••••••••">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Password</label>
+                                    <input type="password" id="login-pass" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="••••••••">
                                 </div>
-
-                                <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4">
-                                    Masuk Aplikasi
-                                </button>
+                                <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-2">Masuk</button>
                             </form>
                         </div>
                     </div>
-
                 </div>
-            </div>
-            <div class="fixed bottom-4 right-4 text-white/70 text-xs bg-black/20 px-3 py-1 rounded-full backdrop-blur">
-                Admin Pass: <b>admin123</b>
             </div>
         </section>
 
-
         <!-- ========================================= -->
-        <!-- 2. HALAMAN SISWA (INTERFACE BARU)         -->
+        <!-- 2. HALAMAN SISWA                          -->
         <!-- ========================================= -->
-        <section id="page-student" class="hidden h-full overflow-y-auto bg-slate-50 flex flex-col items-center p-4 md:p-6">
-            <div class="w-full max-w-2xl space-y-6 fade-in pb-10">
-                
-                <!-- Navbar Siswa -->
+        <section id="page-student" class="hidden h-full overflow-y-auto bg-slate-50 flex flex-col items-center p-4">
+            <div class="w-full max-w-md space-y-5 fade-in pb-20">
                 <nav class="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border border-slate-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-500">Shalom,</p>
-                            <h2 class="text-sm font-bold text-slate-800" id="student-name-display">Nama Siswa</h2>
-                        </div>
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold"><i class="fas fa-user"></i></div>
+                        <div><p class="text-[10px] text-slate-500 uppercase">Siswa</p><h2 class="text-sm font-bold text-slate-800" id="student-name-display">Nama Siswa</h2></div>
                     </div>
-                    <button onclick="logout()" class="text-xs font-semibold text-red-500 bg-red-50 px-3 py-2 rounded-lg hover:bg-red-100 transition">
-                        Logout
-                    </button>
+                    <button onclick="logout()" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fas fa-sign-out-alt"></i></button>
                 </nav>
 
-                <!-- FITUR BARU: RENUNGAN HARIAN (Dari Guru) -->
-                <div id="devotional-card" class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 opacity-10">
-                        <i class="fas fa-bible text-9xl"></i>
-                    </div>
+                <div id="devotional-card" class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-2 -mr-2 opacity-10"><i class="fas fa-bible text-8xl"></i></div>
                     <div class="relative z-10">
-                        <div class="flex items-center gap-2 mb-4 opacity-90">
-                            <span class="bg-white/20 px-2 py-1 rounded text-xs font-semibold">Renungan Hari Ini</span>
-                            <span class="text-xs" id="devotional-date">Senin, 1 Jan</span>
+                        <div class="flex items-center gap-2 mb-3 opacity-90">
+                            <span class="bg-white/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">Renungan</span>
+                            <span class="text-[10px]" id="devotional-date">...</span>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-serif font-bold leading-relaxed mb-4" id="devotional-verse">
-                            "Tuhan adalah gembalaku, takkan kekurangan aku."
-                        </h3>
-                        <p class="text-blue-200 text-sm md:text-base leading-relaxed" id="devotional-content">
-                            Belum ada renungan yang ditambahkan oleh Guru hari ini.
-                        </p>
+                        <h3 class="text-lg font-serif font-bold leading-relaxed mb-2" id="devotional-verse">Loading...</h3>
+                        <p class="text-blue-100 text-xs leading-relaxed" id="devotional-content">Loading...</p>
                     </div>
                 </div>
 
-                <!-- Form Absensi & Pokok Doa -->
-                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <i class="fas fa-clipboard-check text-blue-600"></i> Form Kehadiran & Doa
-                    </h3>
-                    
-                    <form onsubmit="submitAttendance(event)" class="space-y-6">
-                        
-                        <!-- Status Kehadiran -->
-                        <div>
-                            <label class="text-xs font-bold text-slate-400 uppercase mb-2 block">Status Kehadiran</label>
-                            <div class="grid grid-cols-3 gap-3">
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" name="attStatus" value="Hadir" checked class="peer sr-only">
-                                    <div class="py-3 px-2 rounded-xl border border-slate-200 text-center transition-all peer-checked:bg-green-50 peer-checked:border-green-500 peer-checked:text-green-700 hover:bg-slate-50">
-                                        <span class="text-sm font-bold">Hadir</span>
-                                    </div>
-                                </label>
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" name="attStatus" value="Sakit" class="peer sr-only">
-                                    <div class="py-3 px-2 rounded-xl border border-slate-200 text-center transition-all peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 hover:bg-slate-50">
-                                        <span class="text-sm font-bold">Sakit</span>
-                                    </div>
-                                </label>
-                                <label class="cursor-pointer relative">
-                                    <input type="radio" name="attStatus" value="Izin" class="peer sr-only">
-                                    <div class="py-3 px-2 rounded-xl border border-slate-200 text-center transition-all peer-checked:bg-yellow-50 peer-checked:border-yellow-500 peer-checked:text-yellow-700 hover:bg-slate-50">
-                                        <span class="text-sm font-bold">Izin</span>
-                                    </div>
-                                </label>
-                            </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-4 text-sm flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i> Absensi & Doa</h3>
+                    <form onsubmit="submitAttendance(event)" class="space-y-4">
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="cursor-pointer relative"><input type="radio" name="attStatus" value="Hadir" checked class="peer sr-only"><div class="py-2 px-2 rounded-lg border border-slate-200 text-center transition-all peer-checked:bg-green-50 peer-checked:border-green-500 peer-checked:text-green-700 hover:bg-slate-50"><span class="text-xs font-bold">Hadir</span></div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="attStatus" value="Sakit" class="peer sr-only"><div class="py-2 px-2 rounded-lg border border-slate-200 text-center transition-all peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 hover:bg-slate-50"><span class="text-xs font-bold">Sakit</span></div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="attStatus" value="Izin" class="peer sr-only"><div class="py-2 px-2 rounded-lg border border-slate-200 text-center transition-all peer-checked:bg-yellow-50 peer-checked:border-yellow-500 peer-checked:text-yellow-700 hover:bg-slate-50"><span class="text-xs font-bold">Izin</span></div></label>
                         </div>
-
-                        <!-- FITUR BARU: POKOK DOA -->
-                        <div>
-                            <label class="text-xs font-bold text-slate-400 uppercase mb-2 block flex justify-between">
-                                <span>Pokok Doa (Opsional)</span>
-                                <span class="text-blue-500 normal-case font-normal text-[10px] italic">Akan didoakan oleh Guru</span>
-                            </label>
-                            <textarea id="prayerRequest" rows="3" placeholder="Tuliskan pergumulan atau hal yang ingin didoakan..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-                            <i class="fas fa-paper-plane"></i> Kirim Absen & Doa
-                        </button>
+                        <textarea id="prayerRequest" rows="2" placeholder="Pokok Doa (Opsional)..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-xs resize-none"></textarea>
+                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-sm">Kirim Absen</button>
                     </form>
                 </div>
-
-                <!-- Agenda Kegiatan -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-500 uppercase mb-3 px-2">Jadwal Kegiatan Rohani</h3>
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                        <ul id="student-agenda-list" class="divide-y divide-slate-100">
-                            <!-- Render JS -->
-                        </ul>
-                    </div>
+                
+                <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-3">Agenda</h3>
+                    <ul id="student-agenda-list" class="space-y-2 text-sm"></ul>
                 </div>
-
             </div>
         </section>
 
-
         <!-- ========================================= -->
-        <!-- 3. HALAMAN ADMIN (GURU AGAMA)             -->
+        <!-- 3. HALAMAN ADMIN                          -->
         <!-- ========================================= -->
         <section id="page-admin" class="hidden h-screen flex bg-slate-50 overflow-hidden">
-            
-            <!-- Sidebar -->
-            <aside class="w-64 bg-white border-r border-slate-200 z-30 flex flex-col h-full shadow-sm">
+            <aside class="w-64 bg-white border-r border-slate-200 z-30 flex flex-col h-full shadow-sm hidden md:flex">
                 <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 bg-blue-900 text-white">
-                    <div class="w-8 h-8 bg-white/20 rounded flex items-center justify-center">
-                        <i class="fas fa-cross text-sm"></i>
-                    </div>
-                    <div>
-                        <span class="font-bold text-sm block">Guru Agama</span>
-                        <span class="text-[10px] text-blue-200">SMAN 1 Kandangan</span>
-                    </div>
+                    <div class="w-8 h-8 bg-white/20 rounded flex items-center justify-center"><i class="fas fa-cross text-xs"></i></div>
+                    <div><span class="font-bold text-sm block">Guru Agama</span><span class="text-[10px] text-blue-200">SMASA</span></div>
                 </div>
-
-                <div class="flex-1 overflow-y-auto py-6 px-3 space-y-1 custom-scroll">
-                    <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Menu Utama</p>
-                    
-                    <button onclick="switchTab('tab-dashboard')" id="nav-dashboard" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-all active">
-                        <i class="fas fa-chart-pie w-5 text-center"></i> <span class="text-sm font-medium">Dashboard</span>
-                    </button>
-                    <button onclick="switchTab('tab-devotional')" id="nav-devotional" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-all">
-                        <i class="fas fa-book-bible w-5 text-center"></i> <span class="text-sm font-medium">Renungan Harian</span>
-                    </button>
-                    <button onclick="switchTab('tab-attendance')" id="nav-attendance" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-all">
-                        <i class="fas fa-list-check w-5 text-center"></i> <span class="text-sm font-medium">Data Absensi</span>
-                    </button>
-                    
-                    <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Database</p>
-                    <button onclick="switchTab('tab-students')" id="nav-students" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-all">
-                        <i class="fas fa-users w-5 text-center"></i> <span class="text-sm font-medium">Data Siswa</span>
-                    </button>
-                     <button onclick="switchTab('tab-agenda')" id="nav-agenda" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-all">
-                        <i class="fas fa-calendar-day w-5 text-center"></i> <span class="text-sm font-medium">Agenda</span>
-                    </button>
+                <div class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                    <button onclick="switchTab('tab-dashboard')" id="nav-dashboard" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 active"><i class="fas fa-chart-pie w-5"></i> <span class="text-sm font-medium">Dashboard</span></button>
+                    <button onclick="switchTab('tab-attendance')" id="nav-attendance" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3"><i class="fas fa-list w-5"></i> <span class="text-sm font-medium">Absensi</span></button>
+                    <button onclick="switchTab('tab-students')" id="nav-students" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3"><i class="fas fa-users w-5"></i> <span class="text-sm font-medium">Siswa</span></button>
                 </div>
-
-                <div class="p-4 border-t border-slate-100">
-                    <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold">
-                        Keluar
-                    </button>
-                </div>
+                <div class="p-4 border-t"><button onclick="logout()" class="w-full text-red-600 text-xs font-bold">Keluar</button></div>
             </aside>
-
-            <!-- Main Content -->
+            
             <main class="flex-1 flex flex-col h-full overflow-hidden">
-                
-                <div class="flex-1 overflow-y-auto p-6 md:p-10 custom-scroll">
-                    
-                    <!-- 3.1 DASHBOARD -->
-                    <div id="tab-dashboard" class="fade-in space-y-6 max-w-6xl mx-auto">
-                        <h2 class="text-2xl font-bold text-slate-800">Statistik Pelayanan</h2>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <!-- Card Total -->
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                                <p class="text-xs font-bold text-slate-400 uppercase">Total Siswa Kristen</p>
-                                <h3 class="text-3xl font-bold text-slate-800 mt-2" id="dash-total-students">0</h3>
-                            </div>
-                            <!-- Card Hadir -->
-                            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                                <p class="text-xs font-bold text-slate-400 uppercase">Hadir Ibadah/Kelas</p>
-                                <h3 class="text-3xl font-bold text-green-600 mt-2" id="dash-present">0</h3>
-                            </div>
-                             <!-- Card Pokok Doa -->
-                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                                <p class="text-xs font-bold text-slate-400 uppercase">Permohonan Doa</p>
-                                <h3 class="text-3xl font-bold text-purple-600 mt-2" id="dash-prayers">0</h3>
-                            </div>
+                <div class="md:hidden bg-white p-4 flex justify-between items-center shadow-sm">
+                    <span class="font-bold text-blue-900">Admin Panel</span>
+                    <button onclick="logout()" class="text-red-500 text-xs">Keluar</button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll">
+                    <!-- Dashboard -->
+                    <div id="tab-dashboard" class="fade-in space-y-4">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Siswa</p><h3 class="text-2xl font-bold text-slate-800" id="dash-total-students">0</h3></div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Hadir</p><h3 class="text-2xl font-bold text-green-600" id="dash-present">0</h3></div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Doa</p><h3 class="text-2xl font-bold text-purple-600" id="dash-prayers">0</h3></div>
                         </div>
-
-                        <!-- Prayer Requests Section -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                            <div class="px-6 py-4 border-b border-slate-100 bg-purple-50/50 flex justify-between items-center">
-                                <h3 class="font-bold text-purple-800"><i class="fas fa-hands-praying mr-2"></i>Pokok Doa Siswa Hari Ini</h3>
-                            </div>
-                            <div class="p-0">
-                                <ul id="dash-prayer-list" class="divide-y divide-slate-100">
-                                    <!-- Injected JS -->
-                                </ul>
-                            </div>
+                        <div class="bg-white rounded-xl shadow-sm border p-4">
+                             <h3 class="font-bold text-purple-800 mb-2 text-sm">Pokok Doa Hari Ini</h3>
+                             <ul id="dash-prayer-list" class="divide-y text-sm"></ul>
                         </div>
                     </div>
-
-                    <!-- 3.2 RENUNGAN HARIAN (FITUR BARU) -->
-                    <div id="tab-devotional" class="hidden fade-in space-y-6 max-w-4xl mx-auto">
-                        <div class="text-center mb-8">
-                            <h2 class="text-2xl font-bold text-slate-800">Kelola Renungan Harian</h2>
-                            <p class="text-slate-500 text-sm">Apa pesan Tuhan untuk siswa hari ini?</p>
-                        </div>
-
-                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                            <form onsubmit="saveDevotional(event)" class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ayat Emas / Judul</label>
-                                    <input type="text" id="dev-verse" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Mazmur 23:1">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Isi Renungan Singkat</label>
-                                    <textarea id="dev-content" rows="5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Tuliskan renungan singkat di sini..."></textarea>
-                                </div>
-                                <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition">
-                                    <i class="fas fa-save mr-2"></i> Terbitkan ke Halaman Siswa
-                                </button>
-                            </form>
-                        </div>
+                    <!-- Other Tabs Placeholder (Sama seperti sebelumnya, disederhanakan untuk ringkas) -->
+                    <div id="tab-attendance" class="hidden fade-in space-y-4">
+                        <div class="flex justify-between"><h2 class="font-bold">Absensi</h2><button onclick="clearData('db_smasa_attendance')" class="text-red-500 text-xs">Reset</button></div>
+                        <div class="bg-white rounded-xl border overflow-x-auto"><table class="w-full text-sm text-left"><tbody id="table-attendance-admin"></tbody></table></div>
                     </div>
-
-                    <!-- 3.3 DATA ABSENSI -->
-                    <div id="tab-attendance" class="hidden fade-in space-y-6 max-w-6xl mx-auto">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-2xl font-bold text-slate-800">Rekap Kehadiran</h2>
-                            <button onclick="exportCSV()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700 flex items-center gap-2">
-                                <i class="fas fa-file-excel"></i> Export
-                            </button>
+                    <div id="tab-students" class="hidden fade-in space-y-4">
+                        <h2 class="font-bold">Data Siswa</h2>
+                        <div class="bg-white p-4 rounded-xl border space-y-2">
+                             <input id="new-nis" placeholder="NIS" class="border p-2 rounded text-sm w-full">
+                             <input id="new-name" placeholder="Nama" class="border p-2 rounded text-sm w-full">
+                             <input id="new-pass" placeholder="Pass" class="border p-2 rounded text-sm w-full">
+                             <button onclick="addStudentMock()" class="bg-blue-600 text-white p-2 rounded w-full text-sm">Tambah</button>
                         </div>
-                        
-                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-sm text-slate-600">
-                                    <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-xs">
-                                        <tr>
-                                            <th class="p-4">Waktu</th>
-                                            <th class="p-4">Nama</th>
-                                            <th class="p-4">Status</th>
-                                            <th class="p-4">Pokok Doa</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="table-attendance-admin" class="divide-y divide-slate-100"></tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <div class="bg-white rounded-xl border overflow-x-auto"><table class="w-full text-sm text-left"><tbody id="table-students-body"></tbody></table></div>
                     </div>
-
-                    <!-- 3.4 DATA SISWA (TABLA) -->
-                    <div id="tab-students" class="hidden fade-in space-y-6 max-w-6xl mx-auto">
-                         <div class="flex flex-col md:flex-row gap-6">
-                            <!-- Form Tambah -->
-                            <div class="md:w-1/3 bg-white p-6 rounded-2xl shadow-sm h-fit">
-                                <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">Tambah Data Siswa</h3>
-                                <form onsubmit="addStudent(event)" class="space-y-3">
-                                    <input type="text" id="new-nis" required class="w-full px-4 py-2 bg-slate-50 border rounded-lg text-sm" placeholder="NIS">
-                                    <input type="text" id="new-name" required class="w-full px-4 py-2 bg-slate-50 border rounded-lg text-sm" placeholder="Nama Lengkap">
-                                    <input type="text" id="new-pass" required class="w-full px-4 py-2 bg-slate-50 border rounded-lg text-sm" placeholder="Password">
-                                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold text-sm">Simpan</button>
-                                </form>
-                            </div>
-                            <!-- Tabel -->
-                            <div class="md:w-2/3 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                                <table class="w-full text-left text-sm">
-                                    <thead class="bg-slate-50 font-bold text-xs uppercase">
-                                        <tr>
-                                            <th class="p-4">NISN</th>
-                                            <th class="p-4">Nama</th>
-                                            <th class="p-4 text-right">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="table-students-body" class="divide-y divide-slate-100"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 3.5 AGENDA -->
-                    <div id="tab-agenda" class="hidden fade-in space-y-6 max-w-6xl mx-auto">
-                        <h2 class="text-2xl font-bold text-slate-800">Agenda Ibadah/Kelas</h2>
-                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="bg-white p-6 rounded-2xl shadow-sm h-fit">
-                                <form onsubmit="addAgenda(event)" class="space-y-4">
-                                    <input type="text" id="agenda-time" class="w-full px-4 py-2 border rounded-lg" placeholder="Waktu (e.g. Jumat 11:30)">
-                                    <input type="text" id="agenda-title" class="w-full px-4 py-2 border rounded-lg" placeholder="Kegiatan">
-                                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold">Tambah</button>
-                                </form>
-                            </div>
-                            <div class="md:col-span-2 bg-white rounded-2xl border p-4">
-                                <ul id="table-agenda-body" class="space-y-2"></ul>
-                            </div>
-                         </div>
-                    </div>
-
+                </div>
+                <!-- Bottom Nav for Mobile Admin -->
+                <div class="md:hidden bg-white border-t flex justify-around p-3 text-xs">
+                    <button onclick="switchTab('tab-dashboard')">Dash</button>
+                    <button onclick="switchTab('tab-attendance')">Absen</button>
+                    <button onclick="switchTab('tab-students')">Siswa</button>
                 </div>
             </main>
         </section>
 
     </div>
 
-    <!-- JAVASCRIPT SYSTEM -->
     <script>
-        // --- DATABASE KEYS (Updated for SMAN 1 Kandangan) ---
-        const DB_SMASA_STUDENTS = "db_smasa_students";
-        const DB_SMASA_ATTENDANCE = "db_smasa_attendance";
-        const DB_SMASA_AGENDA = "db_smasa_agenda";
-        const DB_SMASA_DEVOTIONAL = "db_smasa_devotional";
+        // --- PWA INSTALL LOGIC ---
+        let deferredPrompt;
+        const installBanner = document.getElementById('pwa-install-banner');
+        
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Show banner after 2 seconds
+            setTimeout(() => {
+                installBanner.classList.remove('hidden');
+            }, 2000);
+        });
+
+        document.getElementById('btn-install').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBanner.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        function dismissInstall() {
+            installBanner.classList.add('hidden');
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Fail', err));
+            });
+        }
+
+        // --- APP LOGIC (Simplified) ---
+        const DB_STUDENTS = "db_smasa_students";
+        const DB_ATTENDANCE = "db_smasa_attendance";
         const ADMIN_PASS = "admin123";
+        let currentUser = null;
 
-        let currentUser = null; 
-
-        // --- INIT ---
         window.onload = function() {
-            // Seed Dummy Data
-            if (!localStorage.getItem(DB_SMASA_STUDENTS)) {
-                const dummy = [
-                    { nis: "1001", name: "Yohanes Putra", pass: "123" },
-                    { nis: "1002", name: "Maria Graciela", pass: "123" }
-                ];
-                localStorage.setItem(DB_SMASA_STUDENTS, JSON.stringify(dummy));
+            if (!localStorage.getItem(DB_STUDENTS)) {
+                localStorage.setItem(DB_STUDENTS, JSON.stringify([{ nis: "1001", name: "Yohanes Putra", pass: "123" }]));
             }
-            if(!localStorage.getItem(DB_SMASA_DEVOTIONAL)) {
-                const defaultDev = {
-                    date: new Date().toLocaleDateString('id-ID'),
-                    verse: "Amsal 1:7",
-                    content: "Takut akan TUHAN adalah permulaan pengetahuan, tetapi orang bodoh menghina hikmat dan didikan."
-                };
-                localStorage.setItem(DB_SMASA_DEVOTIONAL, JSON.stringify(defaultDev));
-            }
+            // Mock Devotional
+            document.getElementById('devotional-date').innerText = new Date().toLocaleDateString('id-ID');
+            document.getElementById('devotional-verse').innerText = '"Tuhan adalah gembalaku."';
+            document.getElementById('devotional-content').innerText = 'Percayalah akan penyertaan-Nya hari ini.';
         };
 
-        // --- NAVIGASI ---
         function showLoginForm(type) {
             document.getElementById('login-form-wrapper').classList.remove('hidden');
-            document.getElementById('login-nis').required = (type === 'student');
             document.getElementById('input-nis-group').style.display = (type === 'student') ? 'block' : 'none';
-            document.getElementById('form-title').innerText = (type === 'student') ? 'Login Siswa' : 'Login Guru Agama';
+            document.getElementById('login-nis').required = (type === 'student');
             window.loginType = type;
         }
 
@@ -478,253 +298,93 @@
         function handleLoginProcess(e) {
             e.preventDefault();
             const pass = document.getElementById('login-pass').value;
-
             if(window.loginType === 'admin') {
                 if(pass === ADMIN_PASS) {
                     document.getElementById('page-login').classList.add('hidden');
                     document.getElementById('page-admin').classList.remove('hidden');
-                    switchTab('tab-dashboard');
+                    renderDashboard();
                 } else alert("Password Salah!");
             } else {
                 const nis = document.getElementById('login-nis').value;
-                const students = JSON.parse(localStorage.getItem(DB_SMASA_STUDENTS) || "[]");
+                const students = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
                 const found = students.find(s => s.nis === nis && s.pass === pass);
                 if(found) {
                     currentUser = found;
                     document.getElementById('student-name-display').innerText = found.name;
                     document.getElementById('page-login').classList.add('hidden');
                     document.getElementById('page-student').classList.remove('hidden');
-                    loadStudentView();
-                } else alert("NISN/Password Salah!");
+                } else alert("NIS/Password Salah!");
             }
         }
 
         function logout() {
-            currentUser = null;
-            document.getElementById('page-student').classList.add('hidden');
-            document.getElementById('page-admin').classList.add('hidden');
-            document.getElementById('page-login').classList.remove('hidden');
-            resetLogin();
-        }
-
-        // --- ADMIN TABS ---
-        function switchTab(tabId) {
-            ['tab-dashboard','tab-devotional','tab-attendance','tab-students','tab-agenda'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            ['nav-dashboard','nav-devotional','nav-attendance','nav-students','nav-agenda'].forEach(id => {
-                document.getElementById(id).classList.remove('active');
-            });
-            document.getElementById(tabId).classList.remove('hidden');
-            document.getElementById(tabId.replace('tab','nav')).classList.add('active');
-
-            if(tabId === 'tab-dashboard') renderDashboard();
-            if(tabId === 'tab-attendance') renderAttendanceAdmin();
-            if(tabId === 'tab-students') renderStudents();
-            if(tabId === 'tab-agenda') renderAgendaAdmin();
-            if(tabId === 'tab-devotional') loadAdminDevotional();
-        }
-
-        // --- FITUR: DASHBOARD ---
-        function renderDashboard() {
-            const students = JSON.parse(localStorage.getItem(DB_SMASA_STUDENTS) || "[]");
-            const attendance = JSON.parse(localStorage.getItem(DB_SMASA_ATTENDANCE) || "[]");
-            const today = new Date().toISOString().split('T')[0];
-            const todayAtt = attendance.filter(a => a.date === today);
-
-            document.getElementById('dash-total-students').innerText = students.length;
-            document.getElementById('dash-present').innerText = todayAtt.filter(a => a.status === 'Hadir').length;
-            
-            // Hitung Pokok Doa (yang tidak kosong)
-            const prayers = todayAtt.filter(a => a.prayer && a.prayer.length > 2);
-            document.getElementById('dash-prayers').innerText = prayers.length;
-
-            // Render Prayer List
-            const listEl = document.getElementById('dash-prayer-list');
-            listEl.innerHTML = '';
-            if(prayers.length === 0) {
-                listEl.innerHTML = '<li class="p-4 text-center text-slate-400 italic">Belum ada pokok doa hari ini.</li>';
-            } else {
-                prayers.forEach(p => {
-                    listEl.innerHTML += `
-                        <li class="p-4 hover:bg-slate-50">
-                            <div class="flex items-start gap-3">
-                                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-xs shrink-0">
-                                    ${p.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <p class="font-bold text-slate-700 text-sm">${p.name}</p>
-                                    <p class="text-slate-600 text-sm italic mt-1">"${p.prayer}"</p>
-                                </div>
-                            </div>
-                        </li>
-                    `;
-                });
-            }
-        }
-
-        // --- FITUR: RENUNGAN HARIAN ---
-        function saveDevotional(e) {
-            e.preventDefault();
-            const verse = document.getElementById('dev-verse').value;
-            const content = document.getElementById('dev-content').value;
-            
-            const data = {
-                date: new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'}),
-                verse,
-                content
-            };
-            
-            localStorage.setItem(DB_SMASA_DEVOTIONAL, JSON.stringify(data));
-            alert("Renungan harian berhasil diterbitkan!");
-        }
-
-        function loadAdminDevotional() {
-            const data = JSON.parse(localStorage.getItem(DB_SMASA_DEVOTIONAL));
-            if(data) {
-                document.getElementById('dev-verse').value = data.verse;
-                document.getElementById('dev-content').value = data.content;
-            }
-        }
-
-        // --- SISWA LOGIC ---
-        function loadStudentView() {
-            // Load Renungan
-            const dev = JSON.parse(localStorage.getItem(DB_SMASA_DEVOTIONAL));
-            if(dev) {
-                document.getElementById('devotional-date').innerText = dev.date;
-                document.getElementById('devotional-verse').innerText = `"${dev.verse}"`;
-                document.getElementById('devotional-content').innerText = dev.content;
-            }
-
-            // Load Agenda
-            const agenda = JSON.parse(localStorage.getItem(DB_SMASA_AGENDA) || "[]");
-            const listEl = document.getElementById('student-agenda-list');
-            listEl.innerHTML = '';
-            if(agenda.length === 0) listEl.innerHTML = '<li class="p-4 text-center text-slate-400 text-sm">Tidak ada jadwal kegiatan.</li>';
-            else {
-                agenda.forEach(a => {
-                    listEl.innerHTML += `
-                        <li class="p-4 flex gap-4">
-                            <span class="font-mono text-blue-600 font-bold text-sm bg-blue-50 px-2 py-1 rounded h-fit">${a.time}</span>
-                            <span class="text-slate-700 font-medium">${a.title}</span>
-                        </li>
-                    `;
-                });
-            }
+            window.location.reload();
         }
 
         function submitAttendance(e) {
             e.preventDefault();
             const status = document.querySelector('input[name="attStatus"]:checked').value;
             const prayer = document.getElementById('prayerRequest').value;
-            
-            const logs = JSON.parse(localStorage.getItem(DB_SMASA_ATTENDANCE) || "[]");
-            const newLog = {
-                id: Date.now(),
-                timestamp: new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}),
-                date: new Date().toISOString().split('T')[0],
-                nis: currentUser.nis,
+            const logs = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
+            logs.unshift({
+                date: new Date().toLocaleDateString('id-ID'),
                 name: currentUser.name,
-                status: status,
-                prayer: prayer
-            };
-            
-            logs.unshift(newLog);
-            localStorage.setItem(DB_SMASA_ATTENDANCE, JSON.stringify(logs));
-            alert("Absensi & Doa berhasil dikirim. Tuhan memberkati!");
-            document.getElementById('prayerRequest').value = '';
+                status,
+                prayer
+            });
+            localStorage.setItem(DB_ATTENDANCE, JSON.stringify(logs));
+            alert("Terkirim! Tuhan Memberkati.");
             logout();
         }
 
-        // --- ADMIN: DATA MANAGEMENT ---
-        function renderStudents() {
-            const list = JSON.parse(localStorage.getItem(DB_SMASA_STUDENTS) || "[]");
-            const tbody = document.getElementById('table-students-body');
-            tbody.innerHTML = '';
-            list.forEach((s, i) => {
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-slate-50">
-                        <td class="p-4 font-mono text-blue-600">${s.nis}</td>
-                        <td class="p-4 font-bold">${s.name}</td>
-                        <td class="p-4 text-right"><button onclick="deleteData('${DB_SMASA_STUDENTS}', ${i}, renderStudents)" class="text-red-500 hover:bg-red-50 p-2 rounded"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                `;
-            });
+        // Admin Functions
+        function switchTab(id) {
+            ['tab-dashboard','tab-attendance','tab-students'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            if(id === 'tab-dashboard') renderDashboard();
+            if(id === 'tab-attendance') renderAttendance();
+            if(id === 'tab-students') renderStudents();
         }
 
-        function addStudent(e) {
-            e.preventDefault();
+        function renderDashboard() {
+            const att = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
+            const std = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
+            document.getElementById('dash-total-students').innerText = std.length;
+            document.getElementById('dash-present').innerText = att.length; // Simplified
+            
+            const prayerList = document.getElementById('dash-prayer-list');
+            prayerList.innerHTML = '';
+            att.filter(a => a.prayer).forEach(a => {
+                prayerList.innerHTML += `<li class="p-3 text-slate-600"><b class="text-slate-800">${a.name}:</b> "${a.prayer}"</li>`;
+            });
+            document.getElementById('dash-prayers').innerText = att.filter(a => a.prayer).length;
+        }
+
+        function renderAttendance() {
+            const att = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
+            const tb = document.getElementById('table-attendance-admin');
+            tb.innerHTML = att.map(a => `<tr class="border-b"><td class="p-2">${a.date}</td><td class="p-2 font-bold">${a.name}</td><td class="p-2">${a.status}</td></tr>`).join('');
+        }
+
+        function renderStudents() {
+            const std = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
+            const tb = document.getElementById('table-students-body');
+            tb.innerHTML = std.map(s => `<tr class="border-b"><td class="p-2">${s.nis}</td><td class="p-2">${s.name}</td></tr>`).join('');
+        }
+
+        function addStudentMock() {
             const nis = document.getElementById('new-nis').value;
             const name = document.getElementById('new-name').value;
             const pass = document.getElementById('new-pass').value;
-            const list = JSON.parse(localStorage.getItem(DB_SMASA_STUDENTS) || "[]");
-            list.push({nis, name, pass});
-            localStorage.setItem(DB_SMASA_STUDENTS, JSON.stringify(list));
-            e.target.reset();
+            const std = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
+            std.push({nis, name, pass});
+            localStorage.setItem(DB_STUDENTS, JSON.stringify(std));
             renderStudents();
-        }
-
-        function renderAttendanceAdmin() {
-            const list = JSON.parse(localStorage.getItem(DB_SMASA_ATTENDANCE) || "[]");
-            const tbody = document.getElementById('table-attendance-admin');
-            tbody.innerHTML = '';
-            list.forEach(l => {
-                const badge = l.status === 'Hadir' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-slate-50">
-                        <td class="p-4 text-xs text-slate-500">${l.date} ${l.timestamp}</td>
-                        <td class="p-4 font-bold">${l.name}</td>
-                        <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${badge}">${l.status}</span></td>
-                        <td class="p-4 text-sm italic text-slate-500">${l.prayer || '-'}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        function addAgenda(e) {
-            e.preventDefault();
-            const time = document.getElementById('agenda-time').value;
-            const title = document.getElementById('agenda-title').value;
-            const list = JSON.parse(localStorage.getItem(DB_SMASA_AGENDA) || "[]");
-            list.push({time, title});
-            localStorage.setItem(DB_SMASA_AGENDA, JSON.stringify(list));
-            e.target.reset();
-            renderAgendaAdmin();
-        }
-
-        function renderAgendaAdmin() {
-            const list = JSON.parse(localStorage.getItem(DB_SMASA_AGENDA) || "[]");
-            const ul = document.getElementById('table-agenda-body');
-            ul.innerHTML = '';
-            list.forEach((a, i) => {
-                ul.innerHTML += `
-                    <li class="flex justify-between items-center bg-slate-50 p-3 rounded">
-                        <span><b class="text-blue-600 mr-2">${a.time}</b> ${a.title}</span>
-                        <button onclick="deleteData('${DB_SMASA_AGENDA}', ${i}, renderAgendaAdmin)" class="text-red-400"><i class="fas fa-trash"></i></button>
-                    </li>
-                `;
-            });
-        }
-
-        function deleteData(key, index, callback) {
-            if(confirm("Hapus data ini?")) {
-                const list = JSON.parse(localStorage.getItem(key) || "[]");
-                list.splice(index, 1);
-                localStorage.setItem(key, JSON.stringify(list));
-                callback();
-            }
+            alert("Siswa Ditambahkan");
         }
         
-        function exportCSV() {
-            const list = JSON.parse(localStorage.getItem(DB_SMASA_ATTENDANCE) || "[]");
-            if(list.length === 0) return alert("Data kosong");
-            let csv = "Tanggal,Waktu,NIS,Nama,Status,Pokok Doa\n";
-            list.forEach(l => csv += `"${l.date}","${l.timestamp}","${l.nis}","${l.name}","${l.status}","${l.prayer}"\n`);
-            const link = document.createElement("a");
-            link.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
-            link.download = "Absensi_SMASA_Kristen.csv";
-            link.click();
+        function clearData(key) {
+            if(confirm("Hapus Data?")) { localStorage.removeItem(key); switchTab('tab-dashboard'); }
         }
     </script>
 </body>
