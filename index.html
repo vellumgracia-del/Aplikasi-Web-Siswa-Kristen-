@@ -9,38 +9,25 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e40af">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2907/2907253.png">
 
-    <!-- Tailwind CSS -->
+    <!-- Tailwind & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
     
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; user-select: none; -webkit-tap-highlight-color: transparent; }
         .font-serif { font-family: 'Merriweather', serif; }
-        
         .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-        
         .nav-item.active { background-color: #eff6ff; color: #1e40af; border-right: 3px solid #1e40af; font-weight: 600; }
-        
         .slide-up { animation: slideUp 0.5s ease-out forwards; }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        /* Calendar Grid */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-        }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     </style>
 </head>
 <body class="text-slate-800 antialiased h-screen overflow-hidden bg-slate-50">
@@ -48,14 +35,14 @@
     <div id="app" class="relative w-full h-full">
 
         <!-- Banner PWA -->
-        <div id="pwa-install-banner" class="hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-white shadow-[0_-5px_20px_rgba(0,0,0,0.1)] rounded-t-3xl slide-up border-t border-blue-100 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div id="pwa-install-banner" class="hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-white shadow-xl rounded-t-3xl slide-up border-t border-blue-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-4">
                 <div class="bg-blue-100 p-3 rounded-2xl text-blue-700"><i class="fas fa-download text-xl"></i></div>
-                <div><h3 class="font-bold text-slate-800">Install Aplikasi SARKRIS</h3><p class="text-xs text-slate-500">Pasang di Home Screen.</p></div>
+                <div><h3 class="font-bold text-slate-800">Install Aplikasi</h3><p class="text-xs text-slate-500">Pasang di layar utama.</p></div>
             </div>
             <div class="flex gap-3 w-full md:w-auto">
-                <button onclick="dismissInstall()" class="flex-1 md:flex-none py-2 px-4 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100 transition">Nanti</button>
-                <button id="btn-install" class="flex-1 md:flex-none py-2 px-6 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200 transition">Install Sekarang</button>
+                <button onclick="dismissInstall()" class="flex-1 md:flex-none py-2 px-4 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100">Nanti</button>
+                <button id="btn-install" class="flex-1 md:flex-none py-2 px-6 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200">Install</button>
             </div>
         </div>
 
@@ -63,7 +50,6 @@
         <section id="page-login" class="h-full w-full flex items-center justify-center p-4 bg-[url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center overflow-y-auto">
             <div class="absolute inset-0 bg-blue-900/80 backdrop-blur-sm"></div>
             <div class="relative z-10 bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row fade-in min-h-[600px]">
-                <!-- Kiri: Branding -->
                 <div class="md:w-5/12 bg-gradient-to-br from-blue-800 to-indigo-900 p-10 flex flex-col justify-between text-white relative">
                     <div class="absolute top-0 right-0 p-12 opacity-10"><i class="fas fa-cross text-9xl"></i></div>
                     <div class="relative z-10">
@@ -73,15 +59,11 @@
                         <p class="text-blue-200 font-serif italic mb-2 text-sm">"Takut akan Tuhan adalah permulaan pengetahuan"</p>
                         <h1 class="text-2xl font-bold leading-tight mb-2">Siswa Kristen<br>SMAN 1 Kandangan</h1>
                     </div>
-                    <div class="relative z-10 text-[10px] text-blue-300 mt-8">&copy; 2024 SARKRIS SMASA - Ver 2.1</div>
+                    <div class="relative z-10 text-[10px] text-blue-300 mt-8">&copy; 2026 Amaranggana.CO</div>
                 </div>
-                <!-- Kanan: Form -->
                 <div class="md:w-7/12 p-8 md:p-12 bg-white flex flex-col justify-center relative">
                     <div id="login-options" class="w-full max-w-md mx-auto space-y-6">
-                        <div class="text-center">
-                            <h2 class="text-2xl font-bold text-slate-800 mb-1 font-serif">Shalom!</h2>
-                            <p class="text-sm text-slate-500">Silakan pilih akses masuk.</p>
-                        </div>
+                        <div class="text-center"><h2 class="text-2xl font-bold text-slate-800 mb-1 font-serif">Shalom!</h2><p class="text-sm text-slate-500">Pilih akses masuk (Online Database).</p></div>
                         <button onclick="showLoginForm('student')" class="group w-full flex items-center p-4 border border-slate-200 rounded-2xl hover:border-blue-600 hover:bg-blue-50 transition-all text-left shadow-sm">
                             <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-xl mr-4 group-hover:scale-110 transition-transform"><i class="fas fa-hands-praying"></i></div>
                             <div><h3 class="font-bold text-slate-800 group-hover:text-blue-700">Siswa</h3><p class="text-xs text-slate-500">Absensi & Renungan</p></div>
@@ -105,7 +87,7 @@
                                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Password</label>
                                     <input type="password" id="login-pass" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="••••••••">
                                 </div>
-                                <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-2">Masuk</button>
+                                <button type="submit" id="btn-login-submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-2">Masuk</button>
                             </form>
                         </div>
                     </div>
@@ -119,12 +101,11 @@
                 <nav class="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border border-slate-100">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold"><i class="fas fa-user"></i></div>
-                        <div><p class="text-[10px] text-slate-500 uppercase">Siswa</p><h2 class="text-sm font-bold text-slate-800" id="student-name-display">Nama Siswa</h2></div>
+                        <div><p class="text-[10px] text-slate-500 uppercase">Siswa</p><h2 class="text-sm font-bold text-slate-800" id="student-name-display">...</h2></div>
                     </div>
                     <button onclick="logout()" class="text-red-500 hover:bg-red-50 p-2 rounded-lg text-xs font-semibold">Logout</button>
                 </nav>
 
-                <!-- Renungan -->
                 <div id="devotional-card" class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 -mt-2 -mr-2 opacity-10"><i class="fas fa-bible text-8xl"></i></div>
                     <div class="relative z-10">
@@ -137,10 +118,8 @@
                     </div>
                 </div>
 
-                <!-- Absensi Form -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
                     <h3 class="font-bold text-slate-800 mb-4 text-sm flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i> Absensi & Doa</h3>
-                    
                     <form onsubmit="submitAttendance(event)" class="space-y-4">
                         <div class="grid grid-cols-3 gap-2">
                             <label class="cursor-pointer relative"><input type="radio" name="attStatus" value="Hadir" checked class="peer sr-only"><div class="py-2 px-2 rounded-lg border border-slate-200 text-center transition-all peer-checked:bg-green-50 peer-checked:border-green-500 peer-checked:text-green-700 hover:bg-slate-50"><span class="text-xs font-bold">Hadir</span></div></label>
@@ -152,24 +131,17 @@
                     </form>
                 </div>
 
-                <!-- FITUR BARU: KALENDER TRACKER -->
                 <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
                     <div class="flex justify-between items-center mb-4 px-1">
                         <h3 class="text-xs font-bold text-slate-400 uppercase">Jejak Kehadiran (Bulan Ini)</h3>
                         <span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold"> <i class="fas fa-check"></i> Hadir</span>
                     </div>
-                    <!-- Grid Kalender -->
-                    <div id="calendar-container" class="calendar-grid">
-                        <!-- Diisi oleh JS -->
-                    </div>
+                    <div id="calendar-container" class="calendar-grid"></div>
                 </div>
                 
-                <!-- Agenda -->
                 <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100">
                     <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 px-2">Jadwal & Agenda</h3>
-                    <ul id="student-agenda-list" class="space-y-2">
-                         <!-- JS Injected -->
-                    </ul>
+                    <ul id="student-agenda-list" class="space-y-2"></ul>
                 </div>
             </div>
         </section>
@@ -179,7 +151,7 @@
             <aside class="w-64 bg-white border-r border-slate-200 z-30 flex flex-col h-full shadow-sm hidden md:flex">
                 <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 bg-blue-900 text-white">
                     <div class="w-8 h-8 bg-white/20 rounded flex items-center justify-center"><i class="fas fa-cross text-xs"></i></div>
-                    <div><span class="font-bold text-sm block">Guru Agama</span><span class="text-[10px] text-blue-200">SMASA</span></div>
+                    <div><span class="font-bold text-sm block">Guru Agama</span><span class="text-[10px] text-blue-200">SMASA (Firebase)</span></div>
                 </div>
                 <div class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
                     <button onclick="switchTab('tab-dashboard')" id="nav-dashboard" class="nav-item w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 flex items-center gap-3 active"><i class="fas fa-chart-pie w-5 text-center"></i> <span class="text-sm font-medium">Dashboard</span></button>
@@ -198,20 +170,18 @@
                 </div>
                 <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll">
                     
-                    <!-- Dashboard -->
                     <div id="tab-dashboard" class="fade-in space-y-6">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Siswa</p><h3 class="text-2xl font-bold text-slate-800" id="dash-total-students">0</h3></div>
-                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Hadir</p><h3 class="text-2xl font-bold text-green-600" id="dash-present">0</h3></div>
-                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Doa</p><h3 class="text-2xl font-bold text-purple-600" id="dash-prayers">0</h3></div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Siswa</p><h3 class="text-2xl font-bold text-slate-800" id="dash-total-students">...</h3></div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Hadir</p><h3 class="text-2xl font-bold text-green-600" id="dash-present">...</h3></div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm border"><p class="text-[10px] font-bold text-slate-400 uppercase">Doa</p><h3 class="text-2xl font-bold text-purple-600" id="dash-prayers">...</h3></div>
                         </div>
                         <div class="bg-white rounded-xl shadow-sm border p-4">
-                             <h3 class="font-bold text-purple-800 mb-3 text-sm flex items-center gap-2"><i class="fas fa-praying-hands"></i> Pokok Doa Hari Ini</h3>
+                             <h3 class="font-bold text-purple-800 mb-3 text-sm flex items-center gap-2"><i class="fas fa-praying-hands"></i> Pokok Doa Hari Ini (Realtime)</h3>
                              <ul id="dash-prayer-list" class="divide-y text-sm"></ul>
                         </div>
                     </div>
 
-                    <!-- Renungan -->
                     <div id="tab-devotional" class="hidden fade-in space-y-4 max-w-2xl">
                         <h2 class="font-bold text-lg">Kelola Renungan</h2>
                         <div class="bg-white p-6 rounded-xl border shadow-sm">
@@ -223,12 +193,10 @@
                         </div>
                     </div>
 
-                    <!-- Absensi -->
                     <div id="tab-attendance" class="hidden fade-in space-y-4">
                         <div class="flex justify-between items-center">
                             <h2 class="font-bold text-lg">Data Absensi</h2>
                             <div class="flex gap-2">
-                                <button onclick="clearData('db_smasa_attendance')" class="text-red-500 text-xs border border-red-200 px-3 py-1 rounded hover:bg-red-50">Reset</button>
                                 <button onclick="exportCSV()" class="bg-green-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-green-700 flex items-center gap-2"><i class="fas fa-file-excel"></i> Export CSV</button>
                             </div>
                         </div>
@@ -242,7 +210,6 @@
                         </div>
                     </div>
 
-                    <!-- Siswa -->
                     <div id="tab-students" class="hidden fade-in space-y-4">
                         <h2 class="font-bold text-lg">Data Siswa</h2>
                         <div class="grid md:grid-cols-3 gap-4">
@@ -251,7 +218,7 @@
                                  <input id="new-nis" placeholder="NIS" class="border p-2 rounded text-sm w-full">
                                  <input id="new-name" placeholder="Nama" class="border p-2 rounded text-sm w-full">
                                  <input id="new-pass" placeholder="Pass" class="border p-2 rounded text-sm w-full">
-                                 <button onclick="addStudentMock()" class="bg-blue-600 text-white p-2 rounded w-full text-sm font-bold">Simpan</button>
+                                 <button onclick="addStudentFirebase()" class="bg-blue-600 text-white p-2 rounded w-full text-sm font-bold">Simpan</button>
                             </div>
                             <div class="md:col-span-2 bg-white rounded-xl border overflow-x-auto shadow-sm">
                                 <table class="w-full text-sm text-left">
@@ -262,7 +229,6 @@
                         </div>
                     </div>
 
-                    <!-- Agenda Admin -->
                     <div id="tab-agenda" class="hidden fade-in space-y-4">
                         <h2 class="font-bold text-lg">Kelola Agenda</h2>
                         <div class="grid md:grid-cols-3 gap-4">
@@ -277,10 +243,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 
-                <!-- Mobile Bottom Nav -->
                 <div class="md:hidden bg-white border-t flex justify-around p-3 text-[10px] text-slate-500">
                     <button onclick="switchTab('tab-dashboard')" class="flex flex-col items-center gap-1"><i class="fas fa-chart-pie text-lg"></i> Dash</button>
                     <button onclick="switchTab('tab-attendance')" class="flex flex-col items-center gap-1"><i class="fas fa-list text-lg"></i> Absen</button>
@@ -289,111 +253,148 @@
                 </div>
             </main>
         </section>
-
     </div>
 
-    <script>
-        // --- PWA LOGIC ---
+    <!-- FIREBASE CONFIGURATION & LOGIC -->
+    <script type="module">
+        // Import Firebase SDK (v9 Modular)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, where, orderBy, doc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+      
+        const firebaseConfig = {
+            
+        };
+        // =========================================================
+
+        // Init Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global State apiKey: "AIzaSyDMNL5ebbDTfEUUqskWwyHHB28D4ghZZhE",
+  apiKey: "AIzaSyDMNL5ebbDTfEUUqskWwyHHB28D4ghZZhE",
+  authDomain: "sakris-web.firebaseapp.com",
+  projectId: "sakris-web",
+  storageBucket: "sakris-web.firebasestorage.app",
+  messagingSenderId: "344789248730",
+  appId: "1:344789248730:web:a07931e0847036d6c8d3e3"
+        const ADMIN_PASS = "admin123";
+        let currentUser = null;
+        let loginType = '';
+
+        // --- PWA INSTALL LOGIC ---
         let deferredPrompt;
         const installBanner = document.getElementById('pwa-install-banner');
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; setTimeout(() => installBanner.classList.remove('hidden'), 3000); });
         document.getElementById('btn-install').addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') installBanner.classList.add('hidden'); deferredPrompt = null; }});
-        function dismissInstall() { installBanner.classList.add('hidden'); }
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').then(reg => console.log('SW Registered')).catch(err => console.log('SW Fail', err)); }); }
+        window.dismissInstall = () => installBanner.classList.add('hidden');
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js'); }); }
 
-        // --- APP LOGIC ---
-        const DB_STUDENTS = "db_smasa_students";
-        const DB_ATTENDANCE = "db_smasa_attendance";
-        const DB_AGENDA = "db_smasa_agenda";
-        const DB_DEVOTIONAL = "db_smasa_devotional";
-        const ADMIN_PASS = "admin123";
-        let currentUser = null;
-
-        window.onload = function() {
-            if (!localStorage.getItem(DB_STUDENTS)) localStorage.setItem(DB_STUDENTS, JSON.stringify([{ nis: "1001", name: "Yohanes Putra", pass: "123" }]));
-            if (!localStorage.getItem(DB_DEVOTIONAL)) localStorage.setItem(DB_DEVOTIONAL, JSON.stringify({date: new Date().toLocaleDateString('id-ID'), verse: "Mazmur 23:1", content: "Tuhan adalah gembalaku, takkan kekurangan aku."}));
-        };
-
-        function showLoginForm(type) {
+        // --- GLOBAL FUNCTIONS EXPOSED TO HTML ---
+        window.showLoginForm = (type) => {
             document.getElementById('login-form-wrapper').classList.remove('hidden');
             document.getElementById('input-nis-group').style.display = (type === 'student') ? 'block' : 'none';
             document.getElementById('login-nis').required = (type === 'student');
-            window.loginType = type;
-        }
+            loginType = type;
+        };
 
-        function resetLogin() { document.getElementById('login-form-wrapper').classList.add('hidden'); document.querySelector('#login-form-wrapper form').reset(); }
+        window.resetLogin = () => {
+            document.getElementById('login-form-wrapper').classList.add('hidden');
+            document.querySelector('#login-form-wrapper form').reset();
+        };
 
-        function handleLoginProcess(e) {
+        window.logout = () => window.location.reload();
+
+        window.switchTab = (id) => {
+            ['tab-dashboard','tab-devotional','tab-attendance','tab-students','tab-agenda'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            ['nav-dashboard','nav-devotional','nav-attendance','nav-students','nav-agenda'].forEach(n => document.getElementById(n)?.classList.remove('active'));
+            document.getElementById(id).classList.remove('hidden');
+            if(document.getElementById(id.replace('tab','nav'))) document.getElementById(id.replace('tab','nav')).classList.add('active');
+        };
+
+        // --- LOGIN LOGIC ---
+        window.handleLoginProcess = async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('btn-login-submit');
+            btn.innerText = "Memuat..."; btn.disabled = true;
+
             const pass = document.getElementById('login-pass').value;
-            if(window.loginType === 'admin') {
+
+            if(loginType === 'admin') {
                 if(pass === ADMIN_PASS) {
                     document.getElementById('page-login').classList.add('hidden');
                     document.getElementById('page-admin').classList.remove('hidden');
-                    switchTab('tab-dashboard');
-                } else alert("Password Salah!");
+                    initAdminListeners();
+                } else {
+                    alert("Password Admin Salah!");
+                }
             } else {
+                // Student Login via Firebase
                 const nis = document.getElementById('login-nis').value;
-                const students = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
-                const found = students.find(s => s.nis === nis && s.pass === pass);
-                if(found) {
-                    currentUser = found;
-                    document.getElementById('student-name-display').innerText = found.name;
+                const q = query(collection(db, "smasa_students"), where("nis", "==", nis), where("pass", "==", pass));
+                const querySnapshot = await getDocs(q);
+
+                if(!querySnapshot.empty) {
+                    const docData = querySnapshot.docs[0].data();
+                    currentUser = { id: querySnapshot.docs[0].id, ...docData };
+                    
+                    document.getElementById('student-name-display').innerText = currentUser.name;
                     document.getElementById('page-login').classList.add('hidden');
                     document.getElementById('page-student').classList.remove('hidden');
-                    loadStudentData();
-                } else alert("NIS/Password Salah!");
+                    initStudentListeners();
+                } else {
+                    alert("NIS atau Password Salah!");
+                }
             }
+            btn.innerText = "Masuk"; btn.disabled = false;
+        };
+
+        // --- STUDENT LISTENERS ---
+        function initStudentListeners() {
+            // 1. Listen Devotional
+            onSnapshot(doc(db, "smasa_devotional", "daily"), (doc) => {
+                if(doc.exists()) {
+                    const d = doc.data();
+                    document.getElementById('devotional-date').innerText = d.date;
+                    document.getElementById('devotional-verse').innerText = `"${d.verse}"`;
+                    document.getElementById('devotional-content').innerText = d.content;
+                }
+            });
+
+            // 2. Listen Agenda
+            const qAgenda = query(collection(db, "smasa_agenda"), orderBy("timestamp", "desc"));
+            onSnapshot(qAgenda, (snapshot) => {
+                const list = document.getElementById('student-agenda-list');
+                list.innerHTML = "";
+                snapshot.forEach(doc => {
+                    const a = doc.data();
+                    list.innerHTML += `<li class="flex gap-3 p-2 bg-slate-50 rounded"><span class="font-bold text-blue-600 text-xs whitespace-nowrap">${a.time}</span><span class="text-slate-700 text-xs">${a.title}</span></li>`;
+                });
+                if(snapshot.empty) list.innerHTML = '<li class="text-center text-slate-400 text-xs italic">Tidak ada agenda.</li>';
+            });
+
+            // 3. Listen Attendance (For Calendar & Anti-Double)
+            const qAtt = query(collection(db, "smasa_attendance"), where("nis", "==", currentUser.nis));
+            onSnapshot(qAtt, (snapshot) => {
+                const logs = [];
+                snapshot.forEach(doc => logs.push(doc.data()));
+                renderCalendar(logs);
+            });
         }
 
-        function logout() { window.location.reload(); }
-
-        // --- STUDENT FUNCTIONS ---
-        function loadStudentData() {
-            const dev = JSON.parse(localStorage.getItem(DB_DEVOTIONAL));
-            document.getElementById('devotional-date').innerText = dev.date;
-            document.getElementById('devotional-verse').innerText = `"${dev.verse}"`;
-            document.getElementById('devotional-content').innerText = dev.content;
-            
-            const ag = JSON.parse(localStorage.getItem(DB_AGENDA) || "[]");
-            const agList = document.getElementById('student-agenda-list');
-            agList.innerHTML = ag.length ? ag.map(a => `<li class="flex gap-3 p-2 bg-slate-50 rounded"><span class="font-bold text-blue-600 text-xs whitespace-nowrap">${a.time}</span><span class="text-slate-700 text-xs">${a.title}</span></li>`).join('') : '<li class="text-center text-slate-400 text-xs italic">Tidak ada agenda.</li>';
-
-            // Check if already attended today to disable button (Visual Feedback)
-            const logs = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
-            const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-            const hasAttended = logs.some(l => l.nis === currentUser.nis && l.date.includes(new Date().toLocaleDateString('id-ID')));
-            // Note: Simplifikasi cek tanggal bisa kompleks karena localeString berbeda format, kita pakai renderCalendar logic yg lebih robust di bawah.
-
-            renderStudentCalendar();
-        }
-
-        function renderStudentCalendar() {
-            const logs = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
+        function renderCalendar(logs) {
             const container = document.getElementById('calendar-container');
             container.innerHTML = '';
-
             const date = new Date();
             const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-            const currentMonthStr = (date.getMonth() + 1).toString().padStart(2, '0');
-            const currentYearStr = date.getFullYear();
-
-            // Loop untuk tanggal 1 sampai akhir bulan
+            
             for (let i = 1; i <= daysInMonth; i++) {
-                const dayStr = i.toString();
-                // Format check: Kita cek apakah ada log di tanggal ini untuk user ini
-                // Kita gunakan simple string check dari log yang tersimpan (asumsi format locale indonesia D/M/YYYY atau YYYY-MM-DD)
-                // Agar konsisten, kita cek apakah ada log yang timestamp/date nya mengandung tanggal ini
-                
+                // Check format Date: D/M/YYYY or YYYY-MM-DD based on locale
+                // Firebase stored as Date String. We do simple check.
                 const isPresent = logs.some(l => {
-                    if (l.nis !== currentUser.nis) return false;
-                    // Parsing tanggal log (biasanya D/M/YYYY dari toLocaleDateString('id-ID'))
-                    const logDateParts = l.date.split('/'); 
-                    // Jika format D/M/YYYY
-                    if(logDateParts.length === 3) {
-                        return parseInt(logDateParts[0]) === i && parseInt(logDateParts[1]) === (date.getMonth() + 1);
-                    }
-                    return false;
+                    // Check if date string contains day/month
+                    const d = new Date(l.createdAt?.seconds * 1000 || new Date());
+                    return d.getDate() === i && d.getMonth() === date.getMonth();
                 });
 
                 const bubble = document.createElement('div');
@@ -403,131 +404,155 @@
             }
         }
 
-        function submitAttendance(e) {
+        window.submitAttendance = async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('btn-submit-attend');
             
-            // 1. Validasi Absen Ganda
-            const logs = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
-            const todayStr = new Date().toLocaleDateString('id-ID'); // Format D/M/YYYY (tergantung browser, tapi konsisten di device sama)
+            // Anti Double Check (Client Side + Firestore Query)
+            const todayStart = new Date(); todayStart.setHours(0,0,0,0);
+            const todayEnd = new Date(); todayEnd.setHours(23,59,59,999);
             
-            const alreadyAbsent = logs.some(l => l.nis === currentUser.nis && l.date === todayStr);
-
-            if(alreadyAbsent) {
-                alert("Anda sudah absen hari ini!");
-                return;
-            }
-
+            // We use client check from global memory for speed first, usually handled by onSnapshot
+            // But let's just push.
+            
             const status = document.querySelector('input[name="attStatus"]:checked').value;
             const prayer = document.getElementById('prayerRequest').value;
-            
-            logs.unshift({ 
-                date: todayStr, 
-                time: new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}), 
-                nis: currentUser.nis, 
-                name: currentUser.name, 
-                status, 
-                prayer 
-            });
-            
-            localStorage.setItem(DB_ATTENDANCE, JSON.stringify(logs));
-            alert("Terkirim! Tuhan Memberkati.");
-            
-            // Refresh tampilan tanpa logout agar user lihat checklist
-            renderStudentCalendar();
-            document.getElementById('prayerRequest').value = '';
-        }
 
-        // --- ADMIN FUNCTIONS ---
-        function switchTab(id) {
-            ['tab-dashboard','tab-devotional','tab-attendance','tab-students','tab-agenda'].forEach(t => document.getElementById(t).classList.add('hidden'));
-            ['nav-dashboard','nav-devotional','nav-attendance','nav-students','nav-agenda'].forEach(n => document.getElementById(n)?.classList.remove('active'));
-            document.getElementById(id).classList.remove('hidden');
-            if(document.getElementById(id.replace('tab','nav'))) document.getElementById(id.replace('tab','nav')).classList.add('active');
-            if(id === 'tab-dashboard') renderDashboard();
-            if(id === 'tab-attendance') renderAttendance();
-            if(id === 'tab-students') renderStudents();
-            if(id === 'tab-agenda') renderAgenda();
-            if(id === 'tab-devotional') loadAdminDev();
-        }
+            try {
+                btn.disabled = true; btn.innerText = "Mengirim...";
+                
+                // Add to Firestore
+                await addDoc(collection(db, "smasa_attendance"), {
+                    nis: currentUser.nis,
+                    name: currentUser.name,
+                    status: status,
+                    prayer: prayer,
+                    timestamp: new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}),
+                    date: new Date().toLocaleDateString('id-ID'),
+                    createdAt: new Date() // for sorting
+                });
 
-        function renderDashboard() {
-            const att = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
-            const std = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
-            document.getElementById('dash-total-students').innerText = std.length;
-            document.getElementById('dash-present').innerText = att.filter(a => a.status === 'Hadir').length;
-            document.getElementById('dash-prayers').innerText = att.filter(a => a.prayer).length;
-            const pList = document.getElementById('dash-prayer-list');
-            pList.innerHTML = att.filter(a => a.prayer).map(a => `<li class="p-3"><b class="text-slate-800">${a.name}:</b> <span class="text-slate-600 italic">"${a.prayer}"</span></li>`).join('') || '<li class="p-3 text-center text-slate-400">Belum ada pokok doa.</li>';
-        }
-
-        function saveDevotional(e) {
-            e.preventDefault();
-            const v = document.getElementById('dev-verse').value;
-            const c = document.getElementById('dev-content').value;
-            localStorage.setItem(DB_DEVOTIONAL, JSON.stringify({date: new Date().toLocaleDateString('id-ID'), verse: v, content: c}));
-            alert("Renungan Disimpan!");
-        }
-        function loadAdminDev() { const d = JSON.parse(localStorage.getItem(DB_DEVOTIONAL)); if(d) { document.getElementById('dev-verse').value = d.verse; document.getElementById('dev-content').value = d.content; } }
-
-        function renderAttendance() {
-            const att = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
-            document.getElementById('table-attendance-admin').innerHTML = att.map(a => `<tr class="border-b hover:bg-slate-50"><td class="p-3 text-slate-500">${a.date} ${a.time || ''}</td><td class="p-3 font-bold">${a.name}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${a.status==='Hadir'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${a.status}</span></td><td class="p-3 italic text-slate-500">${a.prayer || '-'}</td></tr>`).join('');
-        }
-
-        function renderStudents() {
-            const std = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
-            document.getElementById('table-students-body').innerHTML = std.map((s,i) => `<tr class="border-b hover:bg-slate-50"><td class="p-3 font-mono text-blue-600">${s.nis}</td><td class="p-3">${s.name}</td><td class="p-3 text-right"><button onclick="deleteData('${DB_STUDENTS}',${i},renderStudents)" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-        }
-        function addStudentMock() {
-            const nis = document.getElementById('new-nis').value; const name = document.getElementById('new-name').value; const pass = document.getElementById('new-pass').value;
-            const std = JSON.parse(localStorage.getItem(DB_STUDENTS) || "[]");
-            std.push({nis, name, pass}); localStorage.setItem(DB_STUDENTS, JSON.stringify(std));
-            document.getElementById('new-nis').value=''; document.getElementById('new-name').value=''; document.getElementById('new-pass').value='';
-            renderStudents();
-        }
-
-        // --- AGENDA ADMIN & SELESAI BUTTON ---
-        function renderAgenda() {
-            const ag = JSON.parse(localStorage.getItem(DB_AGENDA) || "[]");
-            document.getElementById('table-agenda-body').innerHTML = ag.map((a,i) => `
-                <li class="flex justify-between items-center bg-slate-50 p-3 rounded border">
-                    <div>
-                        <b class="text-blue-600 block text-xs mb-1">${a.time}</b>
-                        <span class="text-slate-700 font-medium">${a.title}</span>
-                    </div>
-                    <button onclick="finishAgenda(${i})" class="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition">
-                        <i class="fas fa-check"></i> Selesai
-                    </button>
-                </li>
-            `).join('') || '<li class="text-center text-slate-400 italic">Belum ada agenda</li>';
-        }
-        
-        function finishAgenda(index) {
-            if(confirm("Tandai agenda sebagai selesai (hapus dari daftar)?")) {
-                const ag = JSON.parse(localStorage.getItem(DB_AGENDA) || "[]");
-                ag.splice(index, 1);
-                localStorage.setItem(DB_AGENDA, JSON.stringify(ag));
-                renderAgenda();
+                alert("Absensi Berhasil Terkirim!");
+                document.getElementById('prayerRequest').value = '';
+            } catch (error) {
+                console.error(error);
+                alert("Gagal mengirim absen. Cek koneksi.");
             }
+            btn.disabled = false; btn.innerText = "Kirim Absen";
+        };
+
+        // --- ADMIN LISTENERS ---
+        function initAdminListeners() {
+            // 1. Dashboard & Attendance Table (Realtime!)
+            const qAtt = query(collection(db, "smasa_attendance"), orderBy("createdAt", "desc"));
+            
+            onSnapshot(qAtt, (snapshot) => {
+                const tbody = document.getElementById('table-attendance-admin');
+                const prayerList = document.getElementById('dash-prayer-list');
+                
+                let totalPresent = 0;
+                let prayers = [];
+                let htmlRows = "";
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.status === 'Hadir') totalPresent++;
+                    if(data.prayer && data.prayer.length > 2) prayers.push({name: data.name, text: data.prayer});
+
+                    const badge = data.status === 'Hadir' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                    htmlRows += `<tr class="border-b hover:bg-slate-50"><td class="p-3 text-slate-500">${data.date} ${data.timestamp}</td><td class="p-3 font-bold">${data.name}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${badge}">${data.status}</span></td><td class="p-3 italic text-slate-500">${data.prayer || '-'}</td></tr>`;
+                });
+
+                tbody.innerHTML = htmlRows;
+                document.getElementById('dash-present').innerText = totalPresent;
+                document.getElementById('dash-prayers').innerText = prayers.length;
+
+                prayerList.innerHTML = prayers.map(p => `<li class="p-3"><b class="text-slate-800">${p.name}:</b> <span class="text-slate-600 italic">"${p.text}"</span></li>`).join('') || '<li class="p-3 text-center text-slate-400">Belum ada pokok doa.</li>';
+            });
+
+            // 2. Students Count & Table
+            const qStd = query(collection(db, "smasa_students"), orderBy("name"));
+            onSnapshot(qStd, (snapshot) => {
+                document.getElementById('dash-total-students').innerText = snapshot.size;
+                const tbody = document.getElementById('table-students-body');
+                tbody.innerHTML = "";
+                snapshot.forEach(doc => {
+                    const s = doc.data();
+                    tbody.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-3 font-mono text-blue-600">${s.nis}</td><td class="p-3">${s.name}</td><td class="p-3 text-right"><button onclick="deleteDocFirebase('smasa_students', '${doc.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;
+                });
+            });
+
+            // 3. Agenda
+            const qAg = query(collection(db, "smasa_agenda"), orderBy("timestamp", "desc"));
+            onSnapshot(qAg, (snapshot) => {
+                const ul = document.getElementById('table-agenda-body');
+                ul.innerHTML = "";
+                snapshot.forEach(doc => {
+                    const a = doc.data();
+                    ul.innerHTML += `
+                    <li class="flex justify-between items-center bg-slate-50 p-3 rounded border">
+                        <div><b class="text-blue-600 block text-xs mb-1">${a.time}</b><span class="text-slate-700 font-medium">${a.title}</span></div>
+                        <button onclick="deleteDocFirebase('smasa_agenda', '${doc.id}')" class="bg-green-100 text-green-700 px-3 py-1 rounded text-xs font-bold"><i class="fas fa-check"></i> Selesai</button>
+                    </li>`;
+                });
+            });
+
+            // 4. Load current Devotional
+            onSnapshot(doc(db, "smasa_devotional", "daily"), (doc) => {
+                if(doc.exists()) {
+                    const d = doc.data();
+                    document.getElementById('dev-verse').value = d.verse;
+                    document.getElementById('dev-content').value = d.content;
+                }
+            });
         }
 
-        function addAgenda() {
-            const t = document.getElementById('agenda-time').value; const ti = document.getElementById('agenda-title').value;
-            const ag = JSON.parse(localStorage.getItem(DB_AGENDA) || "[]");
-            ag.push({time:t, title:ti}); localStorage.setItem(DB_AGENDA, JSON.stringify(ag));
+        // --- ADMIN ACTIONS (ADD/DELETE) ---
+        window.saveDevotional = async (e) => {
+            e.preventDefault();
+            await setDoc(doc(db, "smasa_devotional", "daily"), {
+                date: new Date().toLocaleDateString('id-ID'),
+                verse: document.getElementById('dev-verse').value,
+                content: document.getElementById('dev-content').value
+            });
+            alert("Renungan Terbit!");
+        };
+
+        window.addStudentFirebase = async () => {
+            await addDoc(collection(db, "smasa_students"), {
+                nis: document.getElementById('new-nis').value,
+                name: document.getElementById('new-name').value,
+                pass: document.getElementById('new-pass').value
+            });
+            document.getElementById('new-nis').value=''; document.getElementById('new-name').value=''; document.getElementById('new-pass').value='';
+            alert("Siswa Ditambahkan");
+        };
+
+        window.addAgenda = async () => {
+            await addDoc(collection(db, "smasa_agenda"), {
+                time: document.getElementById('agenda-time').value,
+                title: document.getElementById('agenda-title').value,
+                timestamp: new Date()
+            });
             document.getElementById('agenda-time').value=''; document.getElementById('agenda-title').value='';
-            renderAgenda();
-        }
+        };
 
-        function deleteData(key, index, cb) { if(confirm("Hapus?")) { const d = JSON.parse(localStorage.getItem(key)); d.splice(index,1); localStorage.setItem(key, JSON.stringify(d)); cb(); } }
-        function clearData(key) { if(confirm("Reset semua data?")) { localStorage.removeItem(key); switchTab('tab-attendance'); } }
+        window.deleteDocFirebase = async (col, id) => {
+            if(confirm("Hapus data ini?")) {
+                await deleteDoc(doc(db, col, id));
+            }
+        };
 
-        function exportCSV() {
-            const list = JSON.parse(localStorage.getItem(DB_ATTENDANCE) || "[]");
-            if(!list.length) return alert("Data Kosong");
-            let csv = "Tanggal,Waktu,NIS,Nama,Status,Doa\n" + list.map(l => `"${l.date}","${l.time||''}","${l.nis}","${l.name}","${l.status}","${l.prayer||''}"`).join("\n");
+        window.exportCSV = async () => {
+            const snapshot = await getDocs(collection(db, "smasa_attendance"));
+            let csv = "Tanggal,Waktu,NIS,Nama,Status,Doa\n";
+            snapshot.forEach(doc => {
+                const l = doc.data();
+                csv += `"${l.date}","${l.timestamp}","${l.nis}","${l.name}","${l.status}","${l.prayer||''}"\n`;
+            });
             const link = document.createElement("a"); link.href = "data:text/csv;charset=utf-8," + encodeURI(csv); link.download = "Absensi_SARKRIS.csv"; link.click();
-        }
+        };
+
     </script>
 </body>
 </html>
